@@ -1,0 +1,432 @@
+{% extends "main.html" %} {% block content %} {% load static %}
+<section>
+  <div
+    class="flex items-center justify-center z-50 mx-auto max-w-screen-xl px-4 py-36 sm:px-6 lg:flex lg:items-center lg:px-8"
+  >
+    <div class="text-center ltr:sm:text-left rtl:sm:text-right">
+      <h1 class="text-3xl font-extrabold sm:text-5xl">
+        Let us find your
+
+        <strong class="block font-extrabold text-rose-600">
+          Forever Home.
+        </strong>
+      </h1>
+
+      <p class="mt-4 max-w-2xl sm:text-xl/relaxed text-gray-600">
+        Uncover the Ideal Sanctuary to Call Your Own - Where Every Space Becomes
+        a Canvas for Your Dreams to Blossom into Reality.
+      </p>
+
+      <div class="mt-8 flex items-center justify-center gap-4 text-center">
+        <form action="{% url 'properties' %}" method="get">
+          <div class="relative">
+            <label for="Search" class="sr-only"> Search </label>
+            <input
+              type="text"
+              name="location"
+              id="Search"
+              placeholder="Search by location"
+              class="w-[400px] rounded-lg px-4 py-3 shadow-sm sm:text-sm ring-2"
+            />
+
+            <span
+              class="absolute inset-y-0 end-0 grid w-10 place-content-center"
+            >
+              <button type="button" class="text-gray-600 hover:text-gray-700">
+                <span class="sr-only">Search</span>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="h-4 w-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                  />
+                </svg>
+              </button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="bg-white">
+  <div class="mx-auto max-w-screen-xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+    <div class="mx-auto max-w-3xl text-center">
+      <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl">
+        Trusted by Real Estate Businesses
+      </h2>
+
+      <p class="mt-4 text-gray-500 sm:text-xl">
+        Discover Your Ideal Space, Guiding You Through Every Step of Your
+        Journey with Confidence, Ease, and Expertise.
+      </p>
+    </div>
+
+    <div class="mt-8 sm:mt-12">
+      <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div class="flex flex-col rounded-lg bg-rose-50 px-4 py-8 text-center">
+          <dt class="order-last text-lg font-medium text-gray-500">
+            Total Sales
+          </dt>
+
+          <dd class="text-4xl font-extrabold text-rose-600 md:text-5xl">
+            $4.8m
+          </dd>
+        </div>
+
+        <div class="flex flex-col rounded-lg bg-rose-50 px-4 py-8 text-center">
+          <dt class="order-last text-lg font-medium text-gray-500">
+            Official Addons
+          </dt>
+
+          <dd class="text-4xl font-extrabold text-rose-600 md:text-5xl">24</dd>
+        </div>
+
+        <div class="flex flex-col rounded-lg bg-rose-50 px-4 py-8 text-center">
+          <dt class="order-last text-lg font-medium text-gray-500">
+            Total Addons
+          </dt>
+
+          <dd class="text-4xl font-extrabold text-rose-600 md:text-5xl">86</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="container mx-auto my-16">
+  <div>
+    <h1 class="text-4xl text-gray-900 text-center font-bold">
+      Recent Property For Rent
+    </h1>
+  </div>
+  <div class="grid lg:grid-cols-3 gap-8 px-4 my-5">
+    {% for property in properties %}
+
+    <div
+      class="block rounded-lg p-4 shadow-lg shadow-indigo-100 overflow-hidden relative"
+    >
+    <a href="{% url "property" property.id%}">
+      <span
+        class="px-3 absolute mt-5 text-white rounded-r-full py-1 {% if property.listing_type == 'sell' %}bg-red-500{% else %}bg-green-500{% endif %} capitalize"
+        >{{property.listing_type}}</span
+      >
+      <img
+        alt=""
+        src="{{property.property_image.url}}"
+        class="h-56 w-full rounded-md object-cover"
+      />
+  </a>
+      <div class="mt-2">
+        <dl>
+          <dt class="sr-only">Price</dt>
+          <dd class="text-sm text-gray-500">${{property.price}}</dd>
+          <a href="{% url "property" property.id%}">
+
+          <div>
+            <dt class="sr-only">Address</dt>
+
+            <dd class="font-medium">{{property.name}}</dd>
+          </div>
+        </a>
+        </dl>
+
+        <div class="mt-6 flex items-center justify-between text-xs">
+          <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
+            <svg
+              class="size-4 text-rose-700"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
+              />
+            </svg>
+
+            <div class="mt-1.5 sm:mt-0">
+              <p class="text-gray-500">Parking</p>
+
+              <p class="font-medium">{{property.parking}} spaces</p>
+            </div>
+          </div>
+
+          <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
+            <svg
+              class="size-4 text-rose-700"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+              />
+            </svg>
+
+            <div class="mt-1.5 sm:mt-0">
+              <p class="text-gray-500">Bathroom</p>
+
+              <p class="font-medium">{{property.bathroom}} rooms</p>
+            </div>
+          </div>
+
+          <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
+            <svg
+              class="size-4 text-rose-700"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+              />
+            </svg>
+
+            <div class="mt-1.5 sm:mt-0">
+              <p class="text-gray-500">Bedroom</p>
+
+              <p class="font-medium">{{property.bedroom}} rooms</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+<section class="my-32">
+  <div class="text-center">
+    <h1 class="text-4xl text-gray-900 font-bold">
+      Our Plan For Your Strategies
+    </h1>
+  </div>
+  <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-center md:gap-8">
+      <div
+        class="rounded-2xl border border-rose-600 p-6 shadow-sm ring-1 ring-rose-600 sm:order-last sm:px-8 lg:p-12"
+      >
+        <div class="text-center">
+          <h2 class="text-lg font-medium text-gray-900">
+            Pro
+            <span class="sr-only">Plan</span>
+          </h2>
+
+          <p class="mt-2 sm:mt-4">
+            <strong class="text-3xl font-bold text-gray-900 sm:text-4xl">
+              30$
+            </strong>
+          </p>
+        </div>
+
+        <ul class="mt-6 space-y-2">
+          <li class="flex items-center gap-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-rose-700"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+
+            <span class="text-gray-700"> 20 listings/ month</span>
+          </li>
+
+          <li class="flex items-center gap-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-rose-700"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+
+            <span class="text-gray-700"> Email support </span>
+          </li>
+
+          <li class="flex items-center gap-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-rose-700"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+
+            <span class="text-gray-700"> Help center access </span>
+          </li>
+
+          <li class="flex items-center gap-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-rose-700"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+
+            <span class="text-gray-700"> Phone support </span>
+          </li>
+
+          <li class="flex items-center gap-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-rose-700"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+
+            <span class="text-gray-700"> Community access </span>
+          </li>
+        </ul>
+
+        <a
+          href="#"
+          class="mt-8 block rounded-full border border-rose-600 bg-rose-600 px-12 py-3 text-center text-sm font-medium text-white hover:bg-rose-700 hover:ring-1 hover:ring-rose-700 focus:outline-none focus:ring active:text-rose-500"
+        >
+          Get Started
+        </a>
+      </div>
+
+      <div
+        class="rounded-2xl border border-gray-200 p-6 shadow-sm sm:px-8 lg:p-12"
+      >
+        <div class="text-center">
+          <h2 class="text-lg font-medium text-gray-900">
+            Starter
+            <span class="sr-only">Plan</span>
+          </h2>
+
+          <p class="mt-2 sm:mt-4">
+            <strong class="text-3xl font-bold text-gray-900 sm:text-4xl">
+              20$
+            </strong>
+          </p>
+        </div>
+
+        <ul class="mt-6 space-y-2">
+          <li class="flex items-center gap-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-rose-700"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+
+            <span class="text-gray-700"> 10 listings/ month</span>
+          </li>
+
+          <li class="flex items-center gap-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-rose-700"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+
+            <span class="text-gray-700"> Email support </span>
+          </li>
+
+          <li class="flex items-center gap-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-5 text-rose-700"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4.5 12.75l6 6 9-13.5"
+              />
+            </svg>
+
+            <span class="text-gray-700"> Help center access </span>
+          </li>
+        </ul>
+
+        <a
+          href="#"
+          class="mt-8 block rounded-full border border-rose-600 bg-white px-12 py-3 text-center text-sm font-medium text-rose-600 hover:ring-1 hover:ring-rose-600 focus:outline-none focus:ring active:text-rose-500"
+        >
+          Get Started
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

@@ -1,0 +1,147 @@
+{% extends "main.html" %} {% block content %}
+<section class="bg-gray-100">
+  <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12">
+      <form action="" method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="text-gray-600" for="name">Name</label>
+            <input
+              class="w-full rounded-lg mt-2 border border-gray-300 mt-2 p-3 text-sm"
+              placeholder="John Doe"
+              type="text"
+              name="name"
+              id="name"
+            />
+          </div>
+          <div>
+            <label class="text-gray-600" for="name">Location</label>
+            <input
+              class="w-full rounded-lg mt-2 border border-gray-300 p-3 text-sm"
+              placeholder="Kathmandu"
+              type="text"
+              name="location"
+              id="name"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="text-gray-600" for="name">Province</label>
+
+            <select
+              name="province"
+              id="HeadlineAct"
+              class="p-3 w-full mt-2 rounded-lg border-gray-300 text-gray-700 sm:text-sm"
+            >
+              <option value="koshi">Koshi Province</option>
+              <option value="madhesh">Madhesh Province</option>
+              <option value="bagmati">Bagmati Province</option>
+              <option value="gandaki">Gandaki Province</option>
+              <option value="lumbini">Lumbini Province</option>
+              <option value="karnali">Karnali Province</option>
+              <option value="sudurpaschim">Sudurpaschim Province</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-600" for="name">Listing Type</label>
+
+            <select
+              name="listing_type"
+              id="HeadlineAct"
+              class="p-3 w-full mt-2 rounded-lg border-gray-300 text-gray-700 sm:text-sm"
+            >
+              <option value="sell">Sell</option>
+              <option value="rent">Rent</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="text-gray-600" for="name">Price</label>
+            <input
+            name="price"
+              class="w-full rounded-lg mt-2 border border-gray-300 p-3 text-sm"
+              min="0"
+              placeholder="0"
+              type="number"
+              id="name"
+            />
+          </div>
+          <div>
+            <label class="text-gray-600" for="name">Property Image (Add more images after publishing) </label>
+              <input
+              class="w-full rounded-lg mt-2 border border-gray-300 p-3 text-sm"
+                type="file"
+                name="image"
+                id="file-input"
+              />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div>
+            <label class="text-gray-600" for="name">Parking</label>
+            <input
+              class="w-full rounded-lg mt-2 border border-gray-300 p-3 text-sm"
+              min="0"
+              placeholder="0"
+              type="number"
+              id="name"
+              name="parking"
+            />
+          </div>
+          <div>
+            <label class="text-gray-600" for="name">Bathroom</label>
+            <input
+              class="w-full rounded-lg mt-2 border border-gray-300 p-3 text-sm"
+              min="0"
+              placeholder="0"
+              type="number"
+              id="name"
+              name="bathroom"
+            />
+          </div>
+          <div>
+            <label class="text-gray-600" for="name">Bedroom</label>
+            <input
+              class="w-full rounded-lg mt-2 border border-gray-300 p-3 text-sm"
+              min="0"
+              placeholder="0"
+              type="number"
+              id="name"
+              name="bedroom"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-600" for="name">Description</label>
+
+          <textarea
+            id="editor"
+            name="description"
+            class="w-full rounded-lg border border-gray-300 mt-2 p-3 h-80 text-sm"
+            placeholder="Write a short description"
+            id="description"
+            rows="6"
+          ></textarea>
+        </div>
+
+        <div class="mt-4">
+          <button
+            type="submit"
+            class="inline-block w-full rounded-lg bg-rose-600 px-5 py-3 font-medium text-white sm:w-auto"
+          >
+            Publish
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

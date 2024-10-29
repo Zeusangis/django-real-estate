@@ -1,0 +1,30 @@
+{% extends "main.html" %}
+{% block content %}
+<section class="container mx-auto min-h-screen">
+  <div class="flex flex-col items-center m-5 space-y-1">
+    <h1 class="text-center text-3xl font-semibold">Our Agents</h1>
+    <p class="h-1 w-52 bg-rose-600"></span>
+  </div>
+  <div class="grid grid-cols-4 py-10 gap-10">
+    {% for agent in agents %}
+    <div class="bg-white rounded-md shadow-lg">
+      <div class="flex items-center justify-center">
+        <img src={{agent.profile_image.url}} alt="instructor" class="object-cover h-64 w-full rounded-t" />
+      </div>
+      <div class="p-4">
+
+        <p class="">{{agent.full_name}}</p>
+        <p class="text-gray-600 pb-2"> {{agent.property_set.count}} properties listed
+        </p>
+        <p class="flex justify-center">
+          <a href="{% url 'agent' agent.id%}"
+            class="border-2 rounded px-3 py-1.5 w-full text-center  border-rose-600 bg-rose-600 text-white hover:bg-white hover:text-black transition ease-in-out duration-300">
+            View Profile
+          </a>
+      </div>
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,81 @@
+{% extends "main.html" %} {% block content %}
+<section class="bg-gray-100">
+  <div class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12">
+      <form action="" method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label class="text-gray-600" for="name">Name</label>
+            <input
+              class="w-full rounded-lg mt-2 border border-gray-300 mt-2 p-3 text-sm"
+              placeholder="John Doe"
+              type="text"
+              name="name"
+              id="name"
+              value="{{user.full_name}}"
+            />
+          </div>
+          <div>
+            <label class="text-gray-600" for="email">Email</label>
+            <input
+              class="w-full rounded-lg mt-2 border border-gray-300 p-3 text-sm"
+              placeholder="johndoe@gmail.com"
+              type="email"
+              name="email"
+              id="name"
+              value="{{user.email}}"
+            />
+          </div>
+          <div>
+            <label class="text-gray-600" for="phone">Phone Number</label>
+            <input
+              class="w-full rounded-lg mt-2 border border-gray-300 p-3 text-sm"
+              placeholder="johndoe@gmail.com"
+              type="text"
+              name="phone"
+              id="phone"
+              value="{{user.phone}}"
+            />
+          </div>
+          <div>
+              <label class="text-gray-600" for="phone">Profile Image</label>
+              <div class="flex justify-center" id="imagePreviewContainer">
+                <img id="imagePreview" class="preview-image h-40 w-40 rounded-full object-cover" src="{{user.profile_image.url}}" alt="{{user.full_name}}">
+              </div>
+            <input
+              class="w-full rounded-lg mt-2 border border-gray-300 p-3 text-sm"
+              type="file"
+              name="image"
+              id="image"
+              onchange="previewImage(event)"
+            />
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button
+            type="submit"
+            class="inline-block w-full rounded-lg bg-rose-600 px-5 py-3 font-medium text-white sm:w-auto"
+          >
+            Update Profile
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+<script>
+    function previewImage(event) {
+      const input = event.target;
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const imagePreview = document.getElementById('imagePreview');
+          imagePreview.src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+  </script>
+{% endblock content %}

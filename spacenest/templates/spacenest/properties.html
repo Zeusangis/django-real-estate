@@ -1,0 +1,139 @@
+{% extends "main.html" %} {% block content %} {% load static %}
+<section class="container mx-auto mt-5 mb-16">
+  <div class=" flex items-center justify-center gap-4 text-center">
+    <div class="m-2 max-w-screen-lg">
+      <form action="" class="p-6">
+        {% csrf_token %}
+        <div class=" grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 ">
+          <div class="flex flex-col">
+            <label for="location" class="text-left text-stone-600 text-sm font-medium">Location</label>
+            <input type="text" name="location" id="location" name="location" placeholder="kathmandu"
+              class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+          </div>
+
+
+          <div class="flex flex-col">
+            <label for="min-price" class="text-left text-stone-600 text-sm font-medium">Min Price</label>
+            <input type="number" min="0" id="min-price" name="min-price" placeholder="100"
+              class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+          </div>
+          <div class="flex flex-col">
+            <label for="max-price" class="text-left text-stone-600 text-sm font-medium">Max Price</label>
+            <input type="number" min="0" id="max-price" name="max-price" placeholder="100"
+              class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+          </div>
+          <div class="flex flex-col">
+            <label for="status" class="text-left text-stone-600 text-sm font-medium">Listing Type</label>
+
+            <select id="status" name="listing-type"
+              class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+              <option value="all">All</option>
+              <option value="sell">Sell</option>
+              <option value="rent">Rent</option>
+            </select>
+          </div>
+
+          <div class="flex flex-col">
+            <label for="status" class="text-left text-stone-600 text-sm font-medium">Province</label>
+            <select id="status" name="province"
+              class="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+              <option value="all">All</option>
+              <option value="koshi">Koshi Province</option>
+              <option value="madhesh">Madhesh Province</option>
+              <option value="bagmati">Bagmati Province</option>
+              <option value="gandaki">Gandaki Province</option>
+              <option value="lumbini">Lumbini Province</option>
+              <option value="karnali">Karnali Province</option>
+              <option value="sudurpashchim">Sudurpashchim Province</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid w-full mt-2 grid-cols-2 justify-end space-x-4 md:flex">
+          <button type="reset"
+            class="active:scale-95 rounded bg-gray-200 px-8 py-2 font-medium text-gray-600 outline-none focus:ring hover:opacity-90">
+            Reset
+          </button>
+          <button type="submit"
+          name="search"
+            class="active:scale-95 rounded bg-rose-600 px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90">
+            Search
+          </button>
+
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
+  <div class="grid lg:grid-cols-3 gap-8 px-4 my-5">
+    {% for property in properties %}
+
+    <div class="block rounded-lg p-4 shadow-lg shadow-indigo-100 overflow-hidden relative">
+      <span class="px-3 absolute mt-5 text-white rounded-r-full py-1 {% if property.listing_type == 'sell' %}bg-red-500{% else %}bg-green-500{% endif %} capitalize">{{property.listing_type}}</span>
+      <a href="{% url 'property' property.id %}">
+      <img alt="" src="{{property.property_image.url}}" class="h-56 w-full rounded-md object-cover" />
+      </a>
+      <div class="mt-2">
+        <dl>
+          <div class="flex items-center justify-between py-2">
+            <dt class="sr-only">Price</dt>
+            <dd class="text-sm text-gray-500">${{property.price}}</dd>
+          </div>
+
+          <div>
+            <dt class="sr-only">Address</dt>
+            <a href="{% url 'property' property.id %}">
+            <dd class="font-medium">{{property.name}}</dd>
+            </a>
+          </div>
+        </dl>
+
+        <div class="mt-6 flex items-center justify-between text-xs">
+          <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
+            <svg class="size-4 text-rose-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+            </svg>
+
+            <div class="mt-1.5 sm:mt-0">
+              <p class="text-gray-500">Parking</p>
+
+              <p class="font-medium">{{property.parking}} spaces</p>
+            </div>
+          </div>
+
+          <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
+            <svg class="size-4 text-rose-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+
+            <div class="mt-1.5 sm:mt-0">
+              <p class="text-gray-500">Bathroom</p>
+
+              <p class="font-medium">{{property.bathroom}} rooms</p>
+            </div>
+          </div>
+
+          <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
+            <svg class="size-4 text-rose-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+
+            <div class="mt-1.5 sm:mt-0">
+              <p class="text-gray-500">Bedroom</p>
+
+              <p class="font-medium">{{property.bedroom}} rooms</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock content %}

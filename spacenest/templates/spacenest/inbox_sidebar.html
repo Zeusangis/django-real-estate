@@ -1,0 +1,17 @@
+<section class="flex flex-col pt-3 w-4/12 bg-gray-50 min-h-screen overflow-y-scroll border-r">
+    <div class="divide-y">
+ {% if mails %}
+ {% for mail in mails %}
+ <div class="transition hover:bg-indigo-100 px-3">
+ <a href="{% url "inbox_single" mail.id %}" class="py-5 border-b px-3 ">
+   <div  class="flex justify-between items-center">
+     <h3 class="text-lg font-semibold">{{mail.sender.full_name}}</h3>
+     <p class="text-md text-gray-400">{{mail.created_at|timesince}} ago</p>
+   </div>
+   <div class="text-md italic text-gray-400">{{mail.message|slice:30}}...</div>
+ </a>
+</div>
+ {% endfor %}
+ {% endif %}
+    </div>
+  </section>  

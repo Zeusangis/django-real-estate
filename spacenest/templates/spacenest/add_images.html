@@ -1,0 +1,25 @@
+{% extends "main.html" %}
+{% block content %}
+<section class="container mx-auto ">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+          <input
+            class="w-96 rounded-lg mt-2 border border-gray-300 p-3 text-sm"
+            type="file"
+            name="image"
+            id="image"
+          />
+          <button class="w-40 rounded-lg mt-2 border border-rose-500 text-rose-600 p-3 text-sm hover:bg-rose-500 hover:text-white transition duration-300" type="submit">Submit</button>
+        </div>
+            <div class="mt-5">
+                <h2 class="mb-3">Images</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                    {% for image in images %}
+                    <img src="{{image.image.url}}" class="h-48 w-full object-cover" alt="image">
+                    {% endfor %}
+                </div>      
+            </div>
+    </form>
+</section>
+{% endblock content %}

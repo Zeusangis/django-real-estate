@@ -1,0 +1,108 @@
+<nav class="container mx-auto flex items-center justify-between py-5">
+  <div class="text-3xl font-bold cursor-pointer"><a href="{% url 'index' %}">Urban<span class="text-rose-700 ">Nest</span></a></div>
+  <div>
+    <ul class="flex items-center text-lg gap-10 hidden lg:flex">
+      <li>
+        <a href="{% url 'index' %}" class="cursor-pointer">Home</a>
+      </li>
+      <li><a href="{% url 'properties' %}" class="cursor-pointer">Properties</a></li>
+      <li><a href="{% url 'agents' %}" class="cursor-pointer">Agents</a></li>
+      <li><a href="{% url 'contact' %}" class="cursor-pointer">Contact Us</a></li>
+    </ul>
+  </div>
+  <div class="flex items-center gap-10">
+    {% if request.user.is_authenticated %}
+    <div class="relative">
+        <p
+        id="dropdown-toggle"
+          class="px-4 py-2 text-sm/none text-gray-600 hover:bg-gray-50 hover:text-gray-700 cursor-pointer"
+        >
+          {{request.user.full_name}}
+    </p>
+    
+      <div
+      id="dropdown-items"
+        class="absolute hidden end-0 z-10 mt-2 w-56 divide-y divide-gray-100 rounded-md border border-gray-100 bg-white shadow-lg"
+        role="menu"
+      >
+        <div class="p-2">
+          {% if request.user.is_agent %}
+          <a
+          href="{% url "add-property" %}"
+          class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          role="menuitem"
+          >
+          Add Property
+        </a>    
+          <a
+          href="{% url 'my_properties' %}"
+          class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          role="menuitem"
+          >
+          My Properties
+        </a>    
+        {% else %}
+        <a
+          href="{% url "pricing" %}"
+          class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          role="menuitem"
+          >
+          Become an Agent
+        </a>  
+        {% endif %}
+          <a
+            href="{% url "edit-profile" %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+            role="menuitem"
+          >
+           Edit Profile
+          </a>
+          <a
+            href="{% url "favourites" %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+            role="menuitem"
+          >
+            Favourites
+          </a>
+          <a
+            href="{% url "inbox" %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+            role="menuitem"
+          >
+            Inbox
+          </a>
+          <hr>
+          <a
+          href="{% url 'logout' %}"
+          class="block rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-50 hover:text-red-700"
+          role="menuitem"
+          >
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    {% else %}
+    <a class="group relative inline-flex items-center overflow-hidden rounded bg-rose-600 px-8 py-3 text-white focus:outline-none focus:ring active:bg-rose-500"
+      href="{% url 'login' %}">
+      <span class="absolute -start-full transition-all group-hover:start-4">
+        <svg class="size-5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </span>
+
+      <span class="text-sm font-medium transition-all group-hover:ms-4">Login</span>
+    </a>
+    {% endif %}
+  </div>
+</nav>
+<script>
+  const dropdownToggle = document.querySelector("#dropdown-toggle")
+  const dropdownItems = document.querySelector("#dropdown-items")
+
+  dropdownToggle.addEventListener('click',()=>{
+    dropdownItems.classList.toggle("hidden")
+  })
+</script>
