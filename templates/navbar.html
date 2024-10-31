@@ -1,108 +1,323 @@
-<nav class="container mx-auto flex items-center justify-between py-5">
-  <div class="text-3xl font-bold cursor-pointer"><a href="{% url 'index' %}">Urban<span class="text-rose-700 ">Nest</span></a></div>
-  <div>
-    <ul class="flex items-center text-lg gap-10 hidden lg:flex">
-      <li>
-        <a href="{% url 'index' %}" class="cursor-pointer">Home</a>
-      </li>
-      <li><a href="{% url 'properties' %}" class="cursor-pointer">Properties</a></li>
-      <li><a href="{% url 'agents' %}" class="cursor-pointer">Agents</a></li>
-      <li><a href="{% url 'contact' %}" class="cursor-pointer">Contact Us</a></li>
-    </ul>
-  </div>
-  <div class="flex items-center gap-10">
-    {% if request.user.is_authenticated %}
-    <div class="relative">
-        <p
-        id="dropdown-toggle"
-          class="px-4 py-2 text-sm/none text-gray-600 hover:bg-gray-50 hover:text-gray-700 cursor-pointer"
+<nav class="container mx-auto z-10 px-4" id="navbar">
+  <div class="relative flex items-center justify-between py-5">
+    <!-- Logo -->
+    <a href="{% url 'index' %}" class="text-3xl font-bold">
+      Urban<span class="text-rose-700">Nest</span>
+    </a>
+
+    <!-- Mobile Menu Button (Small Screens Only) -->
+    <button
+      id="mobile-menu-button"
+      class="lg:hidden p-2 hover:bg-gray-100 rounded-md cursor-pointer"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
+    </button>
+
+    <!-- Desktop Navigation Links (Medium Screens and Above) -->
+    <div class="hidden lg:flex items-center space-x-10">
+      <a href="{% url 'index' %}" class="text-lg hover:text-rose-700">Home</a>
+      <a href="{% url 'properties' %}" class="text-lg hover:text-rose-700"
+        >Properties</a
+      >
+      <a href="{% url 'agents' %}" class="text-lg hover:text-rose-700"
+        >Agents</a
+      >
+      <a href="{% url 'contact' %}" class="text-lg hover:text-rose-700"
+        >Contact Us</a
+      >
+    </div>
+
+    <!-- User Menu (Medium Screens and Above) -->
+    <div class="hidden lg:flex items-center space-x-6">
+      {% if request.user.is_authenticated %}
+      <button
+        id="user-menu-toggle"
+        class="py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-700 cursor-pointer rounded-md flex items-center gap-2"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-4"
         >
-          {{request.user.full_name}}
-    </p>
-    
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+          />
+        </svg>
+        <span>{{ request.user.full_name }}</span>
+      </button>
       <div
-      id="dropdown-items"
-        class="absolute hidden end-0 z-10 mt-2 w-56 divide-y divide-gray-100 rounded-md border border-gray-100 bg-white shadow-lg"
-        role="menu"
+        id="user-menu"
+        class="hidden absolute right-0 z-10 mt-64 w-56 divide-y divide-gray-100 rounded-md border border-gray-100 bg-white shadow-lg"
       >
         <div class="p-2">
           {% if request.user.is_agent %}
           <a
-          href="{% url "add-property" %}"
-          class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-          role="menuitem"
-          >
-          Add Property
-        </a>    
-          <a
-          href="{% url 'my_properties' %}"
-          class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-          role="menuitem"
-          >
-          My Properties
-        </a>    
-        {% else %}
-        <a
-          href="{% url "pricing" %}"
-          class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-          role="menuitem"
-          >
-          Become an Agent
-        </a>  
-        {% endif %}
-          <a
-            href="{% url "edit-profile" %}"
+            href="{% url 'add-property' %}"
             class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-            role="menuitem"
           >
-           Edit Profile
+            Add Property
           </a>
           <a
-            href="{% url "favourites" %}"
+            href="{% url 'my_properties' %}"
             class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-            role="menuitem"
+          >
+            My Properties
+          </a>
+          {% else %}
+          <a
+            href="{% url 'pricing' %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          >
+            Become an Agent
+          </a>
+          {% endif %}
+          <a
+            href="{% url 'edit-profile' %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          >
+            Edit Profile
+          </a>
+          <a
+            href="{% url 'favourites' %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
           >
             Favourites
           </a>
           <a
-            href="{% url "inbox" %}"
+            href="{% url 'inbox' %}"
             class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-            role="menuitem"
           >
             Inbox
           </a>
-          <hr>
+          <hr />
           <a
-          href="{% url 'logout' %}"
-          class="block rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-50 hover:text-red-700"
-          role="menuitem"
+            href="{% url 'logout' %}"
+            class="block rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-50"
           >
             Logout
           </a>
         </div>
       </div>
+      {% else %}
+      <a
+        href="{% url 'login' %}"
+        class="px-4 py-2 bg-rose-600 text-white rounded-md hover:bg-rose-500"
+      >
+        Login
+      </a>
+      {% endif %}
     </div>
-    
-    {% else %}
-    <a class="group relative inline-flex items-center overflow-hidden rounded bg-rose-600 px-8 py-3 text-white focus:outline-none focus:ring active:bg-rose-500"
-      href="{% url 'login' %}">
-      <span class="absolute -start-full transition-all group-hover:start-4">
-        <svg class="size-5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-        </svg>
-      </span>
+  </div>
 
-      <span class="text-sm font-medium transition-all group-hover:ms-4">Login</span>
-    </a>
-    {% endif %}
+  <!-- Mobile Navigation Menu -->
+  <div
+    id="mobile-menu"
+    class="fixed inset-y-0 right-0 w-64 bg-white shadow-lg transform translate-x-full transition-transform lg:hidden"
+  >
+    <!-- Mobile Close Button -->
+    <button
+      id="mobile-menu-close"
+      class="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-md cursor-pointer"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
+
+    <!-- Mobile Menu Items -->
+    <ul class="flex flex-col space-y-4 p-4">
+      <li>
+        <a href="{% url 'index' %}" class="block text-lg hover:text-rose-700"
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          href="{% url 'properties' %}"
+          class="block text-lg hover:text-rose-700"
+          >Properties</a
+        >
+      </li>
+      <li>
+        <a href="{% url 'agents' %}" class="block text-lg hover:text-rose-700"
+          >Agents</a
+        >
+      </li>
+      <li>
+        <a href="{% url 'contact' %}" class="block text-lg hover:text-rose-700"
+          >Contact Us</a
+        >
+      </li>
+    </ul>
+    <hr />
+    <div class="md:hidden items-center space-x-6">
+      {% if request.user.is_authenticated %}
+      <button
+        id="mobile-user-menu-toggle"
+        class="py-2 px-4 text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-700 cursor-pointer rounded-md flex items-center gap-2"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="size-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+          />
+        </svg>
+        <span>{{ request.user.full_name }}</span>
+      </button>
+      <div
+        id="mobile-user-menu"
+        class="hidden absolute right-0 z-10 mt-2 w-56 divide-y divide-gray-100 rounded-md border border-gray-100 bg-white shadow-lg"
+      >
+        <div class="p-2">
+          {% if request.user.is_agent %}
+          <a
+            href="{% url 'add-property' %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          >
+            Add Property
+          </a>
+          <a
+            href="{% url 'my_properties' %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          >
+            My Properties
+          </a>
+          {% else %}
+          <a
+            href="{% url 'pricing' %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          >
+            Become an Agent
+          </a>
+          {% endif %}
+          <a
+            href="{% url 'edit-profile' %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          >
+            Edit Profile
+          </a>
+          <a
+            href="{% url 'favourites' %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          >
+            Favourites
+          </a>
+          <a
+            href="{% url 'inbox' %}"
+            class="block rounded-lg px-4 py-2 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          >
+            Inbox
+          </a>
+          <hr />
+          <a
+            href="{% url 'logout' %}"
+            class="block rounded-lg px-4 py-2 text-sm text-red-700 hover:bg-red-50"
+          >
+            Logout
+          </a>
+        </div>
+      </div>
+      {% else %}
+      <a
+        href="{% url 'login' %}"
+        class="px-4 py-2 bg-rose-600 text-white rounded-md hover:bg-rose-500"
+      >
+        Login
+      </a>
+      {% endif %}
+    </div>
   </div>
 </nav>
-<script>
-  const dropdownToggle = document.querySelector("#dropdown-toggle")
-  const dropdownItems = document.querySelector("#dropdown-items")
 
-  dropdownToggle.addEventListener('click',()=>{
-    dropdownItems.classList.toggle("hidden")
-  })
+<script>
+  document
+    .getElementById("mobile-menu-button")
+    .addEventListener("click", function () {
+      document
+        .getElementById("mobile-menu")
+        .classList.toggle("translate-x-full");
+    });
+
+  document
+    .getElementById("mobile-menu-close")
+    .addEventListener("click", function () {
+      document.getElementById("mobile-menu").classList.add("translate-x-full");
+    });
+
+  const userMenuToggle = document.getElementById("user-menu-toggle");
+  const userMenu = document.getElementById("user-menu");
+  const mobileUserMenuToggle = document.getElementById(
+    "mobile-user-menu-toggle"
+  );
+  const mobileUserMenu = document.getElementById("mobile-user-menu");
+
+  if (userMenuToggle) {
+    userMenuToggle.addEventListener("click", function () {
+      userMenu.classList.toggle("hidden");
+    });
+  }
+
+  // Close the dropdown if clicked outside
+  window.addEventListener("click", function (event) {
+    if (
+      userMenu &&
+      !userMenu.contains(event.target) &&
+      !userMenuToggle.contains(event.target)
+    ) {
+      userMenu.classList.add("hidden");
+    }
+  });
+  if (mobileUserMenuToggle) {
+    mobileUserMenuToggle.addEventListener("click", function () {
+      mobileUserMenu.classList.toggle("hidden");
+    });
+  }
+
+  // Close the dropdown if clicked outside
+  window.addEventListener("click", function (event) {
+    if (
+      mobileUserMenu &&
+      !mobileUserMenu.contains(event.target) &&
+      !mobileUserMenuToggle.contains(event.target)
+    ) {
+      mobileUserMenu.classList.add("hidden");
+    }
+  });
 </script>

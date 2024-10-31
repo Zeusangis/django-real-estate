@@ -4,215 +4,215 @@
   <div class="text-center">
     <h1 class="text-4xl text-gray-900 font-bold">Choose Your Plan</h1>
   </div>
-  <form action="" method="POST" class="my-10 px-32">
+  <form action="" method="POST" class="my-10 px-8 md:px-32">
     {% csrf_token %}
-      <fieldset class="grid grid-cols-2 gap-4 my-10">
-        <legend class="sr-only">Delivery</legend>
+    <fieldset class="sm:flex sm:flex-col md:grid md:grid-cols-2 gap-4 my-10">
+      <legend class="sr-only">Delivery</legend>
 
-        <div>
-          <label
-            for="DeliveryStandard"
-            class="flex cursor-pointer justify-between gap-4 rounded-lg border border-gray-100 bg-white p-4 text-sm font-medium shadow-sm hover:border-gray-200 has-[:checked]:border-rose-500 has-[:checked]:ring-1 has-[:checked]:ring-rose-500"
-          >
-            <div>
-              <div class="space-y-2">
-                <p class="text-3xl font-bold text-gray-700">Standard</p>
-                <p>$ 20/month</p>
-              </div>
-
-              <div class="my-5 mt-5 space-y-3 text-gray-900">
-                <div class="flex items-center space-x-2">
-                  <p>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-5 text-rose-700"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                  </p>
-                  <p>10 listings per month</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <p>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-5 text-rose-700"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                  </p>
-                  <p>Email Support</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <p>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-5 text-rose-700"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                  </p>
-                  <p>Help Center Access</p>
-                </div>
-              </div>
+      <div class="py-3">
+        <label
+          for="DeliveryStandard"
+          class="flex cursor-pointer justify-between gap-4 rounded-lg border border-gray-100 bg-white p-4 text-sm font-medium shadow-sm hover:border-gray-200 has-[:checked]:border-rose-500 has-[:checked]:ring-1 has-[:checked]:ring-rose-500"
+        >
+          <div>
+            <div class="space-y-2">
+              <p class="text-3xl font-bold text-gray-700">Standard</p>
+              <p>$ 20/month</p>
             </div>
 
-            <input
-              type="radio"
-              name="plan"
-              value="standard"
-              id="DeliveryStandard"
-              class="size-5 border-gray-300 text-rose-500 accent-rose-600"
-              checked
-            />
-          </label>
-        </div>
-
-        <div>
-          <label
-            for="DeliveryPriority"
-            class="flex cursor-pointer justify-between gap-4 rounded-lg border border-gray-100 bg-white p-4 text-sm font-medium shadow-sm hover:border-gray-200 has-[:checked]:border-rose-500 has-[:checked]:ring-1 has-[:checked]:ring-rose-500"
-          >
-            <div>
-              <div class="space-y-2">
-                <p class="text-3xl font-bold text-gray-700">Pro</p>
-                <p>$ 30/month</p>
+            <div class="my-5 mt-5 space-y-3 text-gray-900">
+              <div class="flex items-center space-x-2">
+                <p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-5 text-rose-700"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                </p>
+                <p>10 listings per month</p>
               </div>
-
-              <div class="my-5 mt-5 space-y-3 text-gray-900">
-                <div class="flex items-center space-x-2">
-                  <p>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-5 text-rose-700"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                  </p>
-                  <p>20 listings per month</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <p>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-5 text-rose-700"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                  </p>
-                  <p>Email Support</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <p>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-5 text-rose-700"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                  </p>
-                  <p>Help Center Access</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <p>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-5 text-rose-700"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                  </p>
-                  <p>Phone Support</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <p>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-5 text-rose-700"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                  </p>
-                  <p>Community Access</p>
-                </div>
+              <div class="flex items-center space-x-2">
+                <p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-5 text-rose-700"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                </p>
+                <p>Email Support</p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-5 text-rose-700"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                </p>
+                <p>Help Center Access</p>
               </div>
             </div>
+          </div>
 
-            <input
-              type="radio"
-              name="plan"
-              value="pro"
-              id="DeliveryPriority"
-              class="size-5 border-gray-300 text-rose-500 accent-rose-600"
-            />
-          </label>
-        </div>
-      </fieldset>
-    <div class='flex justify-end'>
+          <input
+            type="radio"
+            name="plan"
+            value="standard"
+            id="DeliveryStandard"
+            class="size-5 border-gray-300 text-rose-500 accent-rose-600"
+            checked
+          />
+        </label>
+      </div>
+
+      <div class="py-3">
+        <label
+          for="DeliveryPriority"
+          class="flex cursor-pointer justify-between gap-4 rounded-lg border border-gray-100 bg-white p-4 text-sm font-medium shadow-sm hover:border-gray-200 has-[:checked]:border-rose-500 has-[:checked]:ring-1 has-[:checked]:ring-rose-500"
+        >
+          <div>
+            <div class="space-y-2">
+              <p class="text-3xl font-bold text-gray-700">Pro</p>
+              <p>$ 30/month</p>
+            </div>
+
+            <div class="my-5 mt-5 space-y-3 text-gray-900">
+              <div class="flex items-center space-x-2">
+                <p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-5 text-rose-700"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                </p>
+                <p>20 listings per month</p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-5 text-rose-700"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                </p>
+                <p>Email Support</p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-5 text-rose-700"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                </p>
+                <p>Help Center Access</p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-5 text-rose-700"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                </p>
+                <p>Phone Support</p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-5 text-rose-700"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                </p>
+                <p>Community Access</p>
+              </div>
+            </div>
+          </div>
+
+          <input
+            type="radio"
+            name="plan"
+            value="pro"
+            id="DeliveryPriority"
+            class="size-5 border-gray-300 text-rose-500 accent-rose-600"
+          />
+        </label>
+      </div>
+    </fieldset>
+    <div class="flex justify-end">
       <button
         type="submit"
         class="bg-rose-600 text-white px-4 py-2 rounded-md shadow-sm hover:bg-rose-700 focus:outline-none focus:bg-rose-700"
