@@ -15,7 +15,7 @@
   </div>
   </div>
   <div class="grid lg:grid-cols-6 gap-8">
-    <div class="col-span-4">
+    <div class="md:col-span-4">
       <div class="py-6 px-10 border border-2 border-gray-300 rounded-lg">
 
         <h1 class="{% if property.listing_type == 'rent' %}bg-green-500 {% else %} bg-red-500 {% endif %} p-1.5 mb-3 rounded-lg text-white w-fit">$ {{property.price}} {% if property.listing_type == 'rent' %}/ month{% endif %}</h1>
