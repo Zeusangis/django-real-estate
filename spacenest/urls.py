@@ -18,4 +18,5 @@ urlpatterns = [
     path("favourites/", favourites, name="favourites"),
     path("inbox/", inbox, name="inbox"),
     path("inbox-single/<str:pk>", inbox_single, name="inbox_single"),
+    path("expired/", expired, name="expired"),
 ]

@@ -7,6 +7,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY")
+KHALTI_SECRET_KEY = os.getenv("KHALTI_SECRET_KEY")
 
 DEBUG = True
 

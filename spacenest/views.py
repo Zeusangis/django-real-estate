@@ -1,16 +1,12 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from .models import *
-from datetime import timedelta
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 import requests
 import os
-from dotenv import load_dotenv
 from django.http import HttpResponse
-
-load_dotenv()
 
 
 def index(request):
@@ -104,6 +100,13 @@ def property(request, pk):
 
 
 @login_required(login_url="login")
+def expired(request):
+    if not request.user.is_agent:
+        return redirect("index")
+    return render(request, "spacenest/expired.html")
+
+
+@login_required(login_url="login")
 def add_property(request):
     agent = request.user
     user_membership = UserMembership.objects.select_related("user", "membership").get(
@@ -159,7 +162,7 @@ def add_images(request, pk):
         image = request.FILES["image"]
         Image.objects.create(property=property, image=image)
         return redirect(f"/add-images/{pk}")
-    context = {'images':images}
+    context = {"images": images}
     return render(request, "spacenest/add_images.html", context)
 
 
@@ -178,15 +181,16 @@ def pricing(request):
         payload = {
             "return_url": "http://localhost:8000/payment-success/",
             "website_url": "http://localhost:8000",
-            "amount": int(new_membership.price * 100),
+            "amount": int(new_membership.price) * 100,
             "purchase_order_id": user_membership.id,
             "purchase_order_name": user_membership.user.full_name,
         }
-        headers = {"Authorization": f"Key {KHALTI_SECRET_KEY}"}
+        headers = {"Authorization": "Key dbf107a9c72548468029bdf82a8335de"}
         try:
             response = requests.post(URL, data=payload, headers=headers)
             response.raise_for_status()
             data = response.json()
+            print(data)
             return redirect(data["payment_url"])
         except requests.RequestException as e:
             print(f"Request to Khalti API failed: {e}")

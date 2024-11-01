@@ -1,0 +1,18 @@
+{% extends "main.html" %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Your membership has expired</h1>
+      <p>
+        Your membership has expired. Please renew your membership to continue
+        using the site.
+      </p>
+      <p>
+        <a href="{% url 'membership_renew' %}" class="btn btn-primary"
+          >Renew Membership</a
+        >
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}
