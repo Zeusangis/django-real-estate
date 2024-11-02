@@ -58,11 +58,16 @@ class Image(models.Model):
     )
     image = models.ImageField(_("Image"), upload_to="property/")
     property = models.ForeignKey(
-        Property, verbose_name=_("Property"), null=True, blank=True, related_name="images", on_delete=models.CASCADE
+        Property,
+        verbose_name=_("Property"),
+        null=True,
+        blank=True,
+        related_name="images",
+        on_delete=models.CASCADE,
     )
-    def __str__(self):
-        return (f" Image for {self.property.name}")
 
+    def __str__(self):
+        return f" Image for {self.property.name}"
 
 
 class Membership(models.Model):
@@ -96,6 +101,7 @@ class UserMembership(models.Model):
     membership = models.ForeignKey(Membership, on_delete=models.CASCADE)
     date = models.DateTimeField(default=timezone.now)
     expiry = models.DateTimeField(null=True, blank=True)
+    expired = models.BooleanField(default=False)
     payment_status = models.CharField(
         max_length=20, choices=PAYMENT_STATUS_CHOICES, default=INITIATED
     )
