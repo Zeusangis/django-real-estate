@@ -168,11 +168,18 @@ def add_images(request, pk):
 
 @login_required(login_url="login")
 def pricing(request):
-    if request.user.is_agent:
-        return redirect("index")
-    KHALTI_SECRET_KEY = os.getenv("KHALTI_SECRET_KEY")
+    user_membership = UserMembership.objects.filter(user=request.user).first()
+    expired = user_membership and user_membership.expired
+    print(expired)
+    # KHALTI_SECRET_KEY = os.getenv("KHALTI_SECRET_KEY")
     URL = "https://a.khalti.com/api/v2/epayment/initiate/"
     if request.method == "POST":
+        if user_membership and user_membership.payment_status == "initiated":
+            user_membership.delete()
+        if request.user.is_agent:
+            if expired:
+                return redirect("expired")
+            return redirect("index")
         plan = request.POST["plan"]
         new_membership = Membership.objects.get(name=plan)
         user_membership = UserMembership.objects.create(
