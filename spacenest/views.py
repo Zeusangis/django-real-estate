@@ -101,22 +101,22 @@ def property(request, pk):
 
 @login_required(login_url="login")
 def expired(request):
-    if not request.user.is_agent:
-        return redirect("index")
-    return render(request, "spacenest/expired.html")
+    user_membership = UserMembership.objects.filter(user=request.user).first()
+    return render(request, "spacenest/membership_expired.html")
 
 
 @login_required(login_url="login")
 def add_property(request):
     agent = request.user
+    user_membership = UserMembership.objects.filter(user=agent).first()
+    if not agent.is_agent or not user_membership:
+        return redirect("pricing")
     user_membership = UserMembership.objects.select_related("user", "membership").get(
         user=agent
     )
     current_date = timezone.now()
     if current_date > user_membership.expiry:
-        agent.is_agent = False
-        agent.save()
-        user_membership.delete()
+        user_membership.expired = True
         return redirect("pricing")
     else:
         allowed_listing = user_membership.membership.listing_count
@@ -177,9 +177,10 @@ def pricing(request):
         if user_membership and user_membership.payment_status == "initiated":
             user_membership.delete()
         if request.user.is_agent:
+            print("User is already an agent")
             if expired:
+                print("User membership expired")
                 return redirect("expired")
-            return redirect("index")
         plan = request.POST["plan"]
         new_membership = Membership.objects.get(name=plan)
         user_membership = UserMembership.objects.create(
