@@ -102,6 +102,8 @@ def property(request, pk):
 @login_required(login_url="login")
 def expired(request):
     user_membership = UserMembership.objects.filter(user=request.user).first()
+    if user_membership:
+        return redirect("index")
     return render(request, "spacenest/membership_expired.html")
 
 
