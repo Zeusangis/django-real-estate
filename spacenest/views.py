@@ -7,6 +7,7 @@ from django.db import IntegrityError
 import requests
 import os
 from django.http import HttpResponse
+from django.contrib import messages
 
 
 def index(request):
@@ -172,6 +173,10 @@ def add_images(request, pk):
 def pricing(request):
     user_membership = UserMembership.objects.filter(user=request.user).first()
     expired = user_membership and user_membership.expired
+    if not expired and user_membership:
+        messages.info(request, "You are already an agent")
+        return redirect("index")
+
     print(expired)
     # KHALTI_SECRET_KEY = os.getenv("KHALTI_SECRET_KEY")
     URL = "https://a.khalti.com/api/v2/epayment/initiate/"
