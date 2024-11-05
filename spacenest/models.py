@@ -148,13 +148,12 @@ class Mailbox(models.Model):
         _("ID"), primary_key=True, max_length=22, default=shortuuid.uuid, editable=False
     )
     sender = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="sent_messages"
+        User, on_delete=models.CASCADE, related_name="sent_messages_mailbox"
     )
     receiver = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="received_messages"
+        User, on_delete=models.CASCADE, related_name="received_messages_mailbox"
     )
     phone = models.CharField(_("Phone"), max_length=120, null=True, blank=True)
-    message = models.TextField(_("Message"), max_length=120, null=True, blank=True)
     date = models.CharField(_("Date"), max_length=120, null=True, blank=True)
     created_at = models.DateTimeField(_("Sent Date"), auto_now_add=True)
 
@@ -170,11 +169,29 @@ class Message(models.Model):
     id = models.CharField(
         _("ID"), primary_key=True, max_length=22, default=shortuuid.uuid, editable=False
     )
-    name = models.CharField(_("Name"), max_length=120, null=True, blank=True)
-    email = models.CharField(_("Email"), max_length=120, null=True, blank=True)
-    phone = models.CharField(_("Phone"), max_length=120, null=True, blank=True)
+    sender = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="sent_messages",
+        null=True,
+        blank=True,
+    )
+    receiver = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="received_messages",
+        null=True,
+        blank=True,
+    )
+    mailbox = models.ForeignKey(
+        Mailbox,
+        on_delete=models.CASCADE,
+        related_name="messages",
+        null=True,
+        blank=True,
+    )
     message = models.TextField(_("Message"), max_length=120, null=True, blank=True)
-    date = models.DateTimeField(default=timezone.now)
+    date = models.DateTimeField(_("Sent Date"), auto_now_add=True)
 
     def __str__(self):
-        return f"Sent by {self.name}"
+        return f"{self.mailbox}"

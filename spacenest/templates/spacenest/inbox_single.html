@@ -4,23 +4,26 @@
   <div class="hidden md:w-[700px] md:flex">
     {% include "spacenest/inbox_sidebar.html" %}
   </div>
-  <section class="w-full px-2 md:px-14 flex flex-col bg-white rounded-r-3xl">
-    <div class="flex justify-between items-center h-48 border-b-2 mb-8">
+  <section
+    class="w-full px-2 pt-3 md:px-14 flex flex-col bg-white rounded-r-3xl"
+  >
+    <div class="flex justify-between items-center h-20 border-b-2 mb-8">
       <div class="flex space-x-4 items-center">
         <div class="h-12 w-12 rounded-full overflow-hidden">
           <img
-            src="{{mail.sender.profile_image.url}}"
+            src="{{mailbox.sender.profile_image.url}}"
             loading="lazy"
             class="h-full w-full object-cover"
           />
         </div>
         <div class="flex flex-col">
-          <h3 class="font-semibold text-lg">{{mail.sender.full_name}}</h3>
-          <p class="text-light text-gray-400">{{mail.sender.email}}</p>
+          <h3 class="font-semibold text-lg">{{mailbox.sender.full_name}}</h3>
+          <p class="text-light text-gray-400">{{mailbox.sender.email}}</p>
         </div>
       </div>
       <form class="" action="" method="post">
         {% csrf_token %}
+        <input type="hidden" name="form_name" value="delete_form" />
         <input type="hidden" name="id" value="{{mail.id}}" />
         <button type="submit">
           <svg
@@ -40,16 +43,35 @@
         </button>
       </form>
     </div>
-    <section class="min-h-96">
+    <section class="min-h-[490px] max-h-[490px] overflow-y-auto">
       <article class="mt-8 text-gray-500 leading-7 tracking-wider">
-        {{mail.message}}
+        {% for message in mail %}
+        <div
+          class="flex {% if message.sender == request.user %}justify-end{% else %}justify-start{% endif %} mb-2"
+        >
+          <div
+            class="rounded-lg p-2 {% if message.sender == request.user %}bg-indigo-500 text-white{% else %}bg-gray-200 text-gray-700{% endif %}"
+          >
+            <p>{{ message.message }}</p>
+          </div>
+        </div>
+        {% endfor %}
       </article>
     </section>
-    <section class="border rounded-xl bg-gray-50 mb-3">
+
+    <form
+      action="{% url 'inbox_single' mailbox.id %}"
+      name="message"
+      method="POST"
+      class="border rounded-xl bg-gray-50 mb-3"
+    >
+      {% csrf_token %}
+      <input type="hidden" name="form_name" value="reply_form" />
       <textarea
+        name="message"
         class="w-full bg-gray-50 p-2 rounded-xl"
         placeholder="Type your reply here..."
-        rows="3"
+        rows="2"
       ></textarea>
       <div class="flex items-center justify-between p-2">
         <button class="h-6 w-6 text-gray-400">
@@ -67,11 +89,14 @@
             />
           </svg>
         </button>
-        <button class="bg-purple-600 text-white px-6 py-2 rounded-xl">
+        <button
+          class="bg-purple-600 text-white px-6 py-2 rounded-xl"
+          type="submit"
+        >
           Reply
         </button>
       </div>
-    </section>
+    </form>
   </section>
 </main>
 {% endblock content %}

@@ -72,11 +72,18 @@ def property(request, pk):
         date = request.POST.get("date")
         message = request.POST.get("message")
         if sender and receiver and phone and date and message:
-            Mailbox.objects.create(
+            Mailbox.objects.get_or_create(
                 sender=sender,
                 receiver=receiver,
                 phone=phone,
                 date=date,
+            )
+            mailbox = Mailbox.objects.get(sender=sender, receiver=receiver)
+            print(mailbox)
+            Message.objects.create(
+                mailbox=mailbox,
+                sender=sender,
+                receiver=receiver,
                 message=message,
             )
         id = request.POST.get("property_id")
@@ -333,19 +340,46 @@ def contact(request):
 
 
 def inbox(request):
-    mails = Mailbox.objects.select_related("sender", "receiver").filter(
-        receiver=request.user
+    # Fetch mailboxes related to the user
+    mailboxes = Mailbox.objects.select_related("sender", "receiver").filter(
+        Q(receiver=request.user) | Q(sender=request.user)
     )
-    context = {"mails": mails}
+    latest_messages = {}
+    for mail in mailboxes:
+        latest_message = Message.objects.filter(mailbox=mail).last()
+        latest_messages[mail.id] = latest_message  # Store by mailbox ID
+
+    context = {"mailboxes": mailboxes, "latest_messages": latest_messages}
     return render(request, "spacenest/inbox.html", context)
 
 
 def inbox_single(request, pk):
     if request.method == "POST":
-        id = request.POST["id"]
-        mail = Mailbox.objects.get(id=id)
-        mail.delete()
-        return redirect("inbox")
-    mail = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
-    context = {"mail": mail}
+        form_name = request.POST.get("form_name")
+        if form_name == "delete_form":
+
+            return redirect("inbox")
+        if form_name == "reply_form":
+            mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
+            message = request.POST.get("message")
+            Message.objects.create(
+                sender=request.user,
+                receiver=mailbox.sender,
+                mailbox=mailbox,
+                message=message,
+            )
+    mailboxes = Mailbox.objects.select_related("sender", "receiver").filter(
+        Q(receiver=request.user) | Q(sender=request.user)
+    )
+    for mail in mailboxes:
+        latest_message = Message.objects.filter(mailbox=mail).last()
+    mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
+    mail = Message.objects.select_related("sender", "receiver").filter(mailbox=mailbox)
+
+    context = {
+        "mail": mail,
+        "mailbox": mailbox,
+        "mailboxes": mailboxes,
+        "latest_message": latest_message,
+    }
     return render(request, "spacenest/inbox_single.html", context)
