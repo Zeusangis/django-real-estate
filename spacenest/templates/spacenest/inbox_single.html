@@ -11,14 +11,14 @@
       <div class="flex space-x-4 items-center">
         <div class="h-12 w-12 rounded-full overflow-hidden">
           <img
-            src="{{mailbox.sender.profile_image.url}}"
+            src="{{opposite_user.profile_image.url}}"
             loading="lazy"
             class="h-full w-full object-cover"
           />
         </div>
         <div class="flex flex-col">
-          <h3 class="font-semibold text-lg">{{mailbox.sender.full_name}}</h3>
-          <p class="text-light text-gray-400">{{mailbox.sender.email}}</p>
+          <h3 class="font-semibold text-lg">{{opposite_user.full_name}}</h3>
+          <p class="text-light text-gray-400">{{opposite_user.email}}</p>
         </div>
       </div>
       <form class="" action="" method="post">

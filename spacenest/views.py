@@ -348,8 +348,12 @@ def inbox(request):
     for mail in mailboxes:
         latest_message = Message.objects.filter(mailbox=mail).last()
         latest_messages[mail.id] = latest_message  # Store by mailbox ID
-
-    context = {"mailboxes": mailboxes, "latest_messages": latest_messages}
+        opposite_user = mail.sender if mail.receiver == request.user else mail.receiver
+    context = {
+        "mailboxes": mailboxes,
+        "latest_message": latest_message,
+        "opposite_user": opposite_user,
+    }
     return render(request, "spacenest/inbox.html", context)
 
 
@@ -375,8 +379,12 @@ def inbox_single(request, pk):
         latest_message = Message.objects.filter(mailbox=mail).last()
     mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
     mail = Message.objects.select_related("sender", "receiver").filter(mailbox=mailbox)
+    opposite_user = (
+        mailbox.sender if mailbox.receiver == request.user else mailbox.receiver
+    )
 
     context = {
+        "opposite_user": opposite_user,
         "mail": mail,
         "mailbox": mailbox,
         "mailboxes": mailboxes,
