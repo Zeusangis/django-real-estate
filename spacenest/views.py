@@ -352,7 +352,7 @@ def inbox(request):
         opposite_user = mail.sender if mail.receiver == request.user else mail.receiver
     context = {
         "mailboxes": mailboxes,
-        "latest_message": latest_message,
+        "latest_message": latest_message if latest_message else None,
         "opposite_user": opposite_user,
     }
     return render(request, "spacenest/inbox.html", context)
@@ -362,6 +362,8 @@ def inbox_single(request, pk):
     if request.method == "POST":
         form_name = request.POST.get("form_name")
         if form_name == "delete_form":
+            mailbox = Mailbox.objects.get(id=pk)
+            mailbox.delete()
 
             return redirect("inbox")
         if form_name == "reply_form":
@@ -394,7 +396,7 @@ def inbox_single(request, pk):
     return render(request, "spacenest/inbox_single.html", context)
 
 
-def fetch_latest_messages(pk):
+def fetch_latest_messages(request, pk):
     mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
     messages = (
         Message.objects.select_related("sender", "receiver")

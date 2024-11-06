@@ -12,7 +12,7 @@
      </div>
      <p class="text-md text-gray-400">{{mail.created_at|timesince}} ago</p>
    </div>
-   <div class="text-md italic text-center text-gray-400">{{latest_message.message|slice:30}}...</div>
+   <div class="text-md italic text-center text-gray-400">{%if latest_message%}{{latest_message.message|slice:30}}...{%endif%}</div>
  </a>
 </div>
  {% endfor %}
