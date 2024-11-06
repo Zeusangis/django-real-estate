@@ -43,7 +43,10 @@
         </button>
       </form>
     </div>
-    <section class="min-h-[490px] max-h-[490px] overflow-y-auto">
+    <section
+      id="messages-container"
+      class="min-h-[490px] max-h-[490px] overflow-y-auto"
+    >
       <article class="mt-8 text-gray-500 leading-7 tracking-wider">
         {% for message in mail %}
         <div
@@ -99,4 +102,40 @@
     </form>
   </section>
 </main>
-{% endblock content %}
+
+<script>
+  function fetchMessages() {
+      const mailboxId = {% templatetag openvariable %} mailbox.id {% templatetag closevariable %};
+      fetch(`/fetch-latest-messages/${mailboxId}/`)
+          .then(response => response.json())
+          .then(data => {
+              const messagesContainer = document.getElementById("messages-container");
+              messagesContainer.innerHTML = "";  // Clear existing messages
+
+              data.messages.forEach(msg => {
+                  const messageElement = document.createElement("div");
+                  messageElement.classList.add("message", "p-2", "rounded-lg", "mb-2");
+
+                  // Customize based on sender
+                  if (msg.sender === "{% templatetag openvariable %} request.user.username {% templatetag closevariable %}") {
+                      messageElement.classList.add("bg-indigo-500", "text-white", "text-right");
+                  } else {
+                      messageElement.classList.add("bg-gray-200", "text-gray-700");
+                  }
+
+                  messageElement.textContent = msg.message;
+                  messagesContainer.appendChild(messageElement);
+              });
+
+              // Scroll to the bottom of the container
+              messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          })
+          .catch(error => console.error("Error fetching messages:", error));
+          console.log("Fetching messages...");
+  }
+
+  // Fetch new messages every 5 seconds
+  setInterval(fetchMessages, 5000);  // Fetch new messages every 5 seconds
+</script>
+
+{% endblock %}

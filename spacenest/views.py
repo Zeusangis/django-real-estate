@@ -8,6 +8,7 @@ import requests
 import os
 from django.http import HttpResponse
 from django.contrib import messages
+from django.http import JsonResponse
 
 
 def index(request):
@@ -391,3 +392,24 @@ def inbox_single(request, pk):
         "latest_message": latest_message,
     }
     return render(request, "spacenest/inbox_single.html", context)
+
+
+def fetch_latest_messages(pk):
+    mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
+    messages = (
+        Message.objects.select_related("sender", "receiver")
+        .filter(mailbox=mailbox)
+        .order_by("-created_at")
+    )
+
+    # Serialize messages into JSON
+    messages_data = [
+        {
+            "sender": message.sender.username,
+            "message": message.message,
+            "timestamp": message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        for message in messages
+    ]
+
+    return JsonResponse({"messages": messages_data})
