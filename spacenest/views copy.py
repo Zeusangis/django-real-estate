@@ -5,13 +5,10 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 import requests
-import json
+import os
 from django.http import HttpResponse
 from django.contrib import messages
 from django.http import JsonResponse
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-from channels.generic.websocket import AsyncWebsocketConsumer
 
 
 def index(request):
@@ -364,39 +361,26 @@ def inbox(request):
 def inbox_single(request, pk):
     if request.method == "POST":
         form_name = request.POST.get("form_name")
-        mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
-
         if form_name == "delete_form":
+            mailbox = Mailbox.objects.get(id=pk)
             mailbox.delete()
-            return redirect("inbox")
 
-        elif form_name == "reply_form":
-            message_text = request.POST.get("message")
-            new_message = Message.objects.create(
+            return redirect("inbox")
+        if form_name == "reply_form":
+            mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
+            message = request.POST.get("message")
+            Message.objects.create(
                 sender=request.user,
                 receiver=mailbox.sender,
                 mailbox=mailbox,
-                message=message_text,
+                message=message,
             )
-
-            # Send WebSocket notification to the receiver
-            channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.group_send)(
-                f"user_{mailbox.receiver.id}",  # Group name based on the receiver's ID
-                {
-                    "type": "new_mail_message",
-                    "message": message_text,
-                    "sender": request.user.username,
-                    "timestamp": new_message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-                },
-            )
-
-    # Fetch mailboxes, messages, and context as before
     mailboxes = Mailbox.objects.select_related("sender", "receiver").filter(
         Q(receiver=request.user) | Q(sender=request.user)
     )
     for mail in mailboxes:
         latest_message = Message.objects.filter(mailbox=mail).last()
+    mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
     mail = Message.objects.select_related("sender", "receiver").filter(mailbox=mailbox)
     opposite_user = (
         mailbox.sender if mailbox.receiver == request.user else mailbox.receiver
@@ -412,6 +396,30 @@ def inbox_single(request, pk):
     return render(request, "spacenest/inbox_single.html", context)
 
 
+# def fetch_latest_messages(request, pk):
+#     mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
+#     messages = (
+#         Message.objects.select_related("sender", "receiver")
+#         .filter(mailbox=mailbox)
+#         .order_by("-created_at")
+#     )
+
+#     # Serialize messages into JSON
+#     messages_data = [
+#         {
+#             "sender": message.sender.username,
+#             "message": message.message,
+#             "timestamp": message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+#         }
+#         for message in messages
+#     ]
+
+#     return JsonResponse({"messages": messages_data})
+
+from channels.generic.websocket import AsyncWebsocketConsumer
+import json
+
+
 class MailConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         # Define a group name based on the user's unique identifier
@@ -422,15 +430,11 @@ class MailConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
-    # Handle messages received from the channel layer
+    async def receive(self, text_data):
+        # Handle incoming messages if needed
+        pass
+
+    # Send a message to WebSocket
     async def new_mail_message(self, event):
-        # Send the message to the WebSocket
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "message": event["message"],
-                    "sender": event["sender"],
-                    "timestamp": event["timestamp"],
-                }
-            )
-        )
+        message = event["message"]
+        await self.send(text_data=json.dumps({"message": message}))
