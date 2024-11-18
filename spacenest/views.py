@@ -353,6 +353,9 @@ def inbox(request):
         latest_message = Message.objects.filter(mailbox=mail).last()
         latest_messages[mail.id] = latest_message  # Store by mailbox ID
         opposite_user = mail.sender if mail.receiver == request.user else mail.receiver
+    print(
+        latest_message,
+    )
     context = {
         "mailboxes": mailboxes,
         "latest_message": latest_message if latest_message else None,
