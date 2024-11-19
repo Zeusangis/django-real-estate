@@ -377,7 +377,11 @@ def inbox_single(request, pk):
             message_text = request.POST.get("message")
             new_message = Message.objects.create(
                 sender=request.user,
-                receiver=mailbox.sender,
+                receiver=(
+                    mailbox.sender
+                    if mailbox.receiver == request.user
+                    else mailbox.receiver
+                ),
                 mailbox=mailbox,
                 message=message_text,
             )
@@ -394,23 +398,18 @@ def inbox_single(request, pk):
                 },
             )
 
-    # Fetch mailboxes, messages, and context as before
-    mailboxes = Mailbox.objects.select_related("sender", "receiver").filter(
-        Q(receiver=request.user) | Q(sender=request.user)
-    )
-    for mail in mailboxes:
-        latest_message = Message.objects.filter(mailbox=mail).last()
-    mail = Message.objects.select_related("sender", "receiver").filter(mailbox=mailbox)
+    # Fetch the specific mailbox and related messages
+    mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
+    messages = Message.objects.filter(mailbox=mailbox).select_related("sender")
+
     opposite_user = (
         mailbox.sender if mailbox.receiver == request.user else mailbox.receiver
     )
 
     context = {
         "opposite_user": opposite_user,
-        "mail": mail,
+        "messages": messages,  # Use 'messages' instead of 'mail'
         "mailbox": mailbox,
-        "mailboxes": mailboxes,
-        "latest_message": latest_message,
     }
     return render(request, "spacenest/inbox_single.html", context)
 
