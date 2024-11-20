@@ -375,26 +375,17 @@ def inbox_single(request, pk):
 
         elif form_name == "reply_form":
             message_text = request.POST.get("message")
-            new_message = Message.objects.create(
-                sender=request.user,
-                receiver=(
-                    mailbox.sender
-                    if mailbox.receiver == request.user
-                    else mailbox.receiver
-                ),
-                mailbox=mailbox,
-                message=message_text,
-            )
-
-            channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.group_send)(
-                f"user_{mailbox.receiver.id}",
-                {
-                    "type": "new_mail_message",
-                    "message": message_text,
-                    "sender": request.user.full_name,
-                },
-            )
+            if message_text:
+                Message.objects.create(
+                    sender=request.user,
+                    receiver=(
+                        mailbox.sender
+                        if mailbox.receiver == request.user
+                        else mailbox.receiver
+                    ),
+                    mailbox=mailbox,
+                    message=message_text,
+                )
 
     # Fetch the specific mailbox and related messages
     mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
@@ -416,25 +407,25 @@ def inbox_single(request, pk):
     return render(request, "spacenest/inbox_single.html", context)
 
 
-class MailConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        # Define a group name based on the user's unique identifier
-        self.group_name = f"user_{self.scope['user'].id}"
-        await self.channel_layer.group_add(self.group_name, self.channel_name)
-        await self.accept()
+# class MailConsumer(AsyncWebsocketConsumer):
+#     async def connect(self):
+#         # Define a group name based on the user's unique identifier
+#         self.group_name = f"user_{self.scope['user'].id}"
+#         await self.channel_layer.group_add(self.group_name, self.channel_name)
+#         await self.accept()
 
-    async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.group_name, self.channel_name)
+#     async def disconnect(self, close_code):
+#         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
-    # Handle messages received from the channel layer
-    async def new_mail_message(self, event):
-        # Send the message to the WebSocket
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "message": event["message"],
-                    "sender": event["sender"],
-                    "timestamp": event["timestamp"],
-                }
-            )
-        )
+#     # Handle messages received from the channel layer
+#     async def new_mail_message(self, event):
+#         # Send the message to the WebSocket
+#         await self.send(
+#             text_data=json.dumps(
+#                 {
+#                     "message": event["message"],
+#                     "sender": event["sender"],
+#                     "timestamp": event["timestamp"],
+#                 }
+#             )
+#         )
