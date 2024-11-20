@@ -11,7 +11,9 @@ from django.contrib import messages
 from django.http import JsonResponse
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-from channels.generic.websocket import AsyncWebsocketConsumer
+
+# from channels.generic.websocket import AsyncWebsocketConsumer
+from django.shortcuts import get_object_or_404
 
 
 def index(request):
@@ -417,6 +419,7 @@ def inbox_single(request, pk):
 #     async def disconnect(self, close_code):
 #         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
+
 #     # Handle messages received from the channel layer
 #     async def new_mail_message(self, event):
 #         # Send the message to the WebSocket
@@ -429,3 +432,20 @@ def inbox_single(request, pk):
 #                 }
 #             )
 #         )
+def fetch_messages(request, pk):
+    if (
+        request.method == "GET"
+        and request.headers.get("X-Requested-With") == "XMLHttpRequest"
+    ):
+        mailbox = get_object_or_404(Mailbox, id=pk)
+        messages = Message.objects.filter(mailbox=mailbox).select_related("sender")
+        message_data = [
+            {
+                "sender": message.sender.username,
+                "message": message.message,
+                "timestamp": message.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+            }
+            for message in messages
+        ]
+        return JsonResponse({"messages": message_data}, safe=False)
+    return JsonResponse({"error": "Invalid request"}, status=400)

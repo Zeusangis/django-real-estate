@@ -18,10 +18,6 @@ urlpatterns = [
     path("favourites/", favourites, name="favourites"),
     path("inbox/", inbox, name="inbox"),
     path("inbox-single/<str:pk>", inbox_single, name="inbox_single"),
-    # path(
-    #     "fetch-latest-messages/<int:pk>/",
-    #     fetch_latest_messages,
-    #     name="fetch_latest_messages",
-    # ),
+    path("inbox/<int:pk>/messages/", fetch_messages, name="fetch_messages"),
     path("expired/", expired, name="expired"),
 ]
