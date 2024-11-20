@@ -365,9 +365,9 @@ def inbox(request):
 
 
 def inbox_single(request, pk):
+    mailbox = Mailbox.objects.get(id=pk)
     if request.method == "POST":
         form_name = request.POST.get("form_name")
-        mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
 
         if form_name == "delete_form":
             mailbox.delete()
@@ -386,30 +386,32 @@ def inbox_single(request, pk):
                 message=message_text,
             )
 
-            # Send WebSocket notification to the receiver
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
-                f"user_{mailbox.receiver.id}",  # Group name based on the receiver's ID
+                f"user_{mailbox.receiver.id}",
                 {
                     "type": "new_mail_message",
                     "message": message_text,
-                    "sender": request.user.username,
-                    "timestamp": new_message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    "sender": request.user.full_name,
                 },
             )
 
     # Fetch the specific mailbox and related messages
     mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
     messages = Message.objects.filter(mailbox=mailbox).select_related("sender")
-
+    mailboxes = Mailbox.objects.select_related("sender", "receiver").filter(
+        Q(receiver=request.user) | Q(sender=request.user)
+    )
     opposite_user = (
         mailbox.sender if mailbox.receiver == request.user else mailbox.receiver
     )
-
+    print(mailboxes)
     context = {
         "opposite_user": opposite_user,
-        "messages": messages,  # Use 'messages' instead of 'mail'
         "mailbox": mailbox,
+        "mail": messages,
+        "latest_message": messages.last(),
+        "mailboxes": mailboxes,
     }
     return render(request, "spacenest/inbox_single.html", context)
 
