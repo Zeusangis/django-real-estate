@@ -78,20 +78,20 @@ def property(request, pk):
         date = request.POST.get("date")
         message = request.POST.get("message")
         if sender and receiver and phone and date and message:
-            Mailbox.objects.get_or_create(
-                sender=sender,
-                receiver=receiver,
-                phone=phone,
-                date=date,
-            )
-            mailbox = Mailbox.objects.get(sender=sender, receiver=receiver)
-            print(mailbox)
-            Message.objects.create(
-                mailbox=mailbox,
-                sender=sender,
-                receiver=receiver,
-                message=message,
-            )
+            existing_mailbox = Mailbox.objects.filter(sender=sender, receiver=receiver)
+            if existing_mailbox:
+                mailbox_id = existing_mailbox.first().id
+                Message.objects.create(
+                    sender=sender,
+                    receiver=receiver,
+                    mailbox_id=mailbox_id,
+                    message=message,
+                )
+                return redirect(f"/inbox-single/{mailbox_id}")
+            else:
+                Mailbox.objects.create(
+                    sender=sender, receiver=receiver, phone=phone, date=date
+                )
         id = request.POST.get("property_id")
         if id:
             if not is_favourite:
@@ -139,7 +139,6 @@ def add_property(request):
         user_listed = (
             Property.objects.filter(owner=agent).select_related("owner").count()
         )
-        print(allowed_listing, user_listed)
         if user_listed > allowed_listing:
             return HttpResponse("Count Exceeded")
 
@@ -389,7 +388,6 @@ def inbox_single(request, pk):
                     message=message_text,
                 )
 
-    # Fetch the specific mailbox and related messages
     mailbox = Mailbox.objects.select_related("sender", "receiver").get(id=pk)
     messages = Message.objects.filter(mailbox=mailbox).select_related("sender")
     mailboxes = Mailbox.objects.select_related("sender", "receiver").filter(
@@ -398,12 +396,17 @@ def inbox_single(request, pk):
     opposite_user = (
         mailbox.sender if mailbox.receiver == request.user else mailbox.receiver
     )
+    latest_messages = {}
+    for mail in mailboxes:
+        latest_message = Message.objects.filter(mailbox=mail).last()
+        latest_messages[mail.id] = latest_message  # Store by mailbox ID
+        opposite_user = mail.sender if mail.receiver == request.user else mail.receiver
     print(mailboxes)
     context = {
         "opposite_user": opposite_user,
         "mailbox": mailbox,
         "mail": messages,
-        "latest_message": messages.last(),
+        "latest_message": latest_message,
         "mailboxes": mailboxes,
     }
     return render(request, "spacenest/inbox_single.html", context)

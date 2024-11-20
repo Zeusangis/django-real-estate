@@ -8,6 +8,10 @@
             <a href="{% url 'edit-profile' %}">
             <button class="text-white bg-rose-600 px-4 py-2 rounded-full">Edit Profile</button>
             </a>
+            {%else%}
+            <a href="{% url 'inbox' %}">
+                <button class="text-white bg-rose-600 px-4 py-2 rounded-full">Edit Profile</button>
+            </a>
             {% endif %}
         </div>
         <div class="flex gap-10">
