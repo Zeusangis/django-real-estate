@@ -346,6 +346,14 @@ def contact(request):
 
 
 def inbox(request):
+    if request.method == "POST":
+        receiver_id = request.POST.get("receiver")
+        receiver = User.objects.get(id=receiver_id)
+        print(receiver)
+        sender = request.user
+        Mailbox.objects.create(sender=sender, receiver=receiver)
+        messages.success(request, "You can now chat with the agent!")
+
     # Fetch mailboxes related to the user
     mailboxes = Mailbox.objects.select_related("sender", "receiver").filter(
         Q(receiver=request.user) | Q(sender=request.user)
