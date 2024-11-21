@@ -10,7 +10,7 @@
             </a>
             {%else%}
             <a href="{% url 'inbox' %}">
-                <button class="text-white bg-rose-600 px-4 py-2 rounded-full">Edit Profile</button>
+                <button class="text-white bg-rose-600 px-4 py-2 rounded-full">Inbox</button>
             </a>
             {% endif %}
         </div>
@@ -33,7 +33,7 @@
         <h2 class="text-3xl font-semibold text-center">Listed Properties</h2>
         <div class="grid lg:grid-cols-3 gap-8 my-5">
             {% for property in properties %}
-            <div class="block rounded-lg py-4 shadow-lg shadow-indigo-100 overflow-hidden relative">
+            <div class="block rounded-lg py-4 px-3 shadow-lg shadow-indigo-100 overflow-hidden relative">
                 <span
                     class="px-3 absolute mt-5 text-white rounded-r-full py-1 {% if property.listing_type == 'sell' %}bg-red-500{% else %}bg-green-500{% endif %} capitalize">{{property.listing_type}}</span>
                 <a href="{% url 'property' property.id %}">

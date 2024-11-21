@@ -339,7 +339,8 @@ def contact(request):
         email = request.POST["email"]
         phone = request.POST["phone"]
         message = request.POST["message"]
-        Message.objects.create(name=name, email=email, phone=phone, message=message)
+        Contact.objects.create(name=name, email=email, phone=phone, message=message)
+        messages.success(request, "Message sent successfully")
         return redirect("index")
     return render(request, "spacenest/contact.html")
 

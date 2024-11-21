@@ -195,3 +195,17 @@ class Message(models.Model):
 
     def __str__(self):
         return f"{self.mailbox}"
+
+
+class Contact(models.Model):
+    id = models.CharField(
+        _("ID"), primary_key=True, max_length=22, default=shortuuid.uuid, editable=False
+    )
+    name = models.CharField(_("Name"), max_length=120)
+    email = models.EmailField(_("Email"))
+    phone = models.CharField(_("Phone"), max_length=120)
+    message = models.TextField(_("Message"))
+    created_at = models.DateTimeField(_("Sent Date"), auto_now_add=True)
+
+    def __str__(self):
+        return self.name
