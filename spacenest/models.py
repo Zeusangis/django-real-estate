@@ -208,4 +208,4 @@ class Contact(models.Model):
     created_at = models.DateTimeField(_("Sent Date"), auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return f"Sent by {self.name}."
