@@ -2,20 +2,19 @@
     <div class="divide-y">
  {% if mailboxes %}
  <div class="transition bg-gray-100">
- {% for mail in mailboxes %}
- <a href="{% url "inbox_single" mail.id %}">
-   <div  class="flex justify-between items-center py-5 px-3 border-b hover:bg-indigo-100">
-    <div class="flex items-center gap-2">
-      <img src="{{opposite_user.profile_image.url}}" alt="profile" class="w-10 h-10 rounded-full object-cover">
-      <div>
-        <h3 class="text-lg font-semibold">{{opposite_user.full_name}}</h3>
-     </div>
-     <p class="text-md text-gray-400">{{mail.created_at|timesince}} ago</p>
-   </div>
-   {% comment %} <div class="text-md italic text-gray-400">{%if latest_message%}{{latest_message.message|slice:30}}...{%endif%}</div> {% endcomment %}
- </a>
-</div>
- {% endfor %}
+  {% for item in mailboxes %}
+  <a href="{% url 'inbox_single' item.mailbox.id %}">
+      <div class="flex justify-between items-center py-5 px-3 border-b hover:bg-indigo-100">
+          <div class="flex items-center gap-2">
+              <img src="{{ item.opposite_user.profile_image.url }}" alt="profile" class="w-10 h-10 rounded-full object-cover">
+              <div>
+                  <h3 class="text-lg font-semibold">{{ item.opposite_user.full_name }}</h3>
+              </div>
+              <p class="text-md text-gray-400">{{ item.mailbox.created_at|timesince }} ago</p>
+          </div>
+      </div>
+  </a>
+  {% endfor %}
  {%else%}
   <div class="flex items-center justify-center py-5 mt-28 gap-3">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-400">

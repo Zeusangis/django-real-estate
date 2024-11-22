@@ -224,9 +224,10 @@ def pricing(request):
     return render(request, "spacenest/pricing.html")
 
 
-@login_required(login_url="login")
 def payment_success(request):
     context = {}
+    if not request.user.is_authenticated:
+        return redirect("login")
     if request.method == "GET":
         try:
             status = request.GET.get("status")
@@ -358,18 +359,18 @@ def inbox(request):
     mailboxes = Mailbox.objects.select_related("sender", "receiver").filter(
         Q(receiver=request.user) | Q(sender=request.user)
     )
-    latest_messages = {}
-    for mail in mailboxes:
-        latest_message = Message.objects.filter(mailbox=mail).last()
-        latest_messages[mail.id] = latest_message  # Store by mailbox ID
-        opposite_user = mail.sender if mail.receiver == request.user else mail.receiver
-    print(
-        latest_message,
-    )
     context = {
-        "mailboxes": mailboxes,
-        "latest_message": latest_message if latest_message else None,
-        "opposite_user": opposite_user,
+        "mailboxes": [
+            {
+                "mailbox": mailbox,
+                "opposite_user": (
+                    mailbox.receiver
+                    if mailbox.sender == request.user
+                    else mailbox.sender
+                ),
+            }
+            for mailbox in mailboxes
+        ],
     }
     return render(request, "spacenest/inbox.html", context)
 
@@ -402,21 +403,22 @@ def inbox_single(request, pk):
     mailboxes = Mailbox.objects.select_related("sender", "receiver").filter(
         Q(receiver=request.user) | Q(sender=request.user)
     )
-    opposite_user = (
-        mailbox.sender if mailbox.receiver == request.user else mailbox.receiver
-    )
-    latest_messages = {}
-    for mail in mailboxes:
-        latest_message = Message.objects.filter(mailbox=mail).last()
-        latest_messages[mail.id] = latest_message  # Store by mailbox ID
-        opposite_user = mail.sender if mail.receiver == request.user else mail.receiver
-    print(mailboxes)
+    opp_user = mailbox.sender if mailbox.receiver == request.user else mailbox.receiver
     context = {
-        "opposite_user": opposite_user,
+        "messages": messages,
         "mailbox": mailbox,
-        "mail": messages,
-        "latest_message": latest_message,
-        "mailboxes": mailboxes,
+        "opposite_user": opp_user,
+        "mailboxes": [
+            {
+                "mailbox": mailbox,
+                "opposite_user": (
+                    mailbox.receiver
+                    if mailbox.sender == request.user
+                    else mailbox.sender
+                ),
+            }
+            for mailbox in mailboxes
+        ],
     }
     return render(request, "spacenest/inbox_single.html", context)
 
