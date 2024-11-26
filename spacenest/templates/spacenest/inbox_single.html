@@ -48,7 +48,7 @@
       class="min-h-[490px] max-h-[490px] overflow-y-auto"
     >
       <article class="mt-8 text-gray-500 leading-7 tracking-wider">
-        {% for message in mail %}
+        {% for message in mails %}
         <div
           class="flex {% if message.sender == request.user %}justify-end{% else %}justify-start{% endif %} mb-2"
         >
@@ -102,34 +102,4 @@
     </form>
   </section>
 </main>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  const userWebSocket = new WebSocket(
-    "ws://" + window.location.host + "/ws/mails/"
-  );
-
-  userWebSocket.onmessage = function (event) {
-    const data = JSON.parse(event.data);
-    console.log(data);
-    const messagesContainer = document.getElementById("messages-container");
-
-    // Add the new message to the container
-    const messageElement = document.createElement("div");
-    messageElement.className = "message p-2 rounded-lg mb-2";
-
-    // Customize based on sender
-    if (data.sender === "{{ request.user.username }}") {
-      messageElement.classList.add("bg-indigo-500", "text-white", "text-right");
-    } else {
-      messageElement.classList.add("bg-gray-200", "text-gray-700");
-    }
-
-    messageElement.textContent = data.message;
-    messagesContainer.appendChild(messageElement);
-
-    // Scroll to the bottom of the container
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  };
-</script>
-
 {% endblock %}

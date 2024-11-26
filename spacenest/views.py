@@ -405,7 +405,7 @@ def inbox_single(request, pk):
     )
     opp_user = mailbox.sender if mailbox.receiver == request.user else mailbox.receiver
     context = {
-        "messages": messages,
+        "mails": messages,
         "mailbox": mailbox,
         "opposite_user": opp_user,
         "mailboxes": [

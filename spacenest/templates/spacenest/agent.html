@@ -33,6 +33,7 @@
     </div>
     <div class="py-10">
         <h2 class="text-3xl font-semibold text-center">Listed Properties</h2>
+        {% if properties %}
         <div class="grid lg:grid-cols-3 gap-8 my-5">
             {% for property in properties %}
             <div class="block rounded-lg py-4 px-3 shadow-lg shadow-indigo-100 overflow-hidden relative">
@@ -104,6 +105,9 @@
             </div>
             {% endfor %}
         </div>
+        {% else %}
+        <div class="text-center text-gray-500 pt-10">No properties listed yet</div>
+        {% endif %}
     </div>
     </div>
 </section>
